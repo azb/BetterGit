@@ -36,10 +36,20 @@ File localDir = new File("");
 File cloudDir = new File("");
 Label localDirLabel = new Label();
 Label cloudDirLabel = new Label();
-        
+File[] localFileList = new File("").listFiles();
+File[] cloudFileList = new File("").listFiles();
+
+ArrayList<CheckBox> localFileCheckBox = new ArrayList<CheckBox>();
+ArrayList<CheckBox> cloudFileCheckBox = new ArrayList<CheckBox>();
+
+VBox localFileVBox = new VBox();
+VBox cloudFileVBox = new VBox();
+
     @Override
     public void start(Stage primaryStage) {
-        
+        //localFileVBox.setPrefSize( Double.MAX_VALUE, Double.MAX_VALUE );
+        //cloudFileVBox.setPrefSize( Double.MAX_VALUE, Double.MAX_VALUE );
+
         localDirLabel.setText("Choose a Local Directory");
         cloudDirLabel.setText("Choose a Cloud Directory");
         
@@ -103,12 +113,6 @@ Label cloudDirLabel = new Label();
         //cloudFilePane.setFitToHeight(true);
         //cloudFilePane.setFitToWidth(true);
 
-        ArrayList<CheckBox> localFileCheckBox = new ArrayList<CheckBox>();
-        ArrayList<CheckBox> cloudFileCheckBox = new ArrayList<CheckBox>();
-
-        VBox localFileVBox = new VBox();
-        VBox cloudFileVBox = new VBox();
-
         for (int i = 0; i < 100; i++) {
             CheckBox newBox = new CheckBox();
             newBox.setText("localfilename" + i + ".ext");
@@ -163,7 +167,9 @@ Label cloudDirLabel = new Label();
                 }else{
                     localDir = selectedDirectory;
                     localDirLabel.setText(localDir.getPath());
+                    localFileList = localDir.listFiles();
                     System.out.println("Changed local directory");
+                    repopulateLocalFiles();
                 }
             }
         });
@@ -183,12 +189,12 @@ Label cloudDirLabel = new Label();
                 }else{
                     cloudDir = selectedDirectory;
                     cloudDirLabel.setText(cloudDir.getPath());
+                    cloudFileList = cloudDir.listFiles();
                     System.out.println("Changed cloud directory");
+                    repopulateCloudFiles();
                 }
-                System.out.println("Changed cloud directory");
             }
         });
-        
         
         localRepoSettings.getChildren().add(localDirLabel);
         localRepoSettings.getChildren().add(changeLocalDirBtn);
@@ -213,7 +219,30 @@ Label cloudDirLabel = new Label();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
+public void repopulateLocalFiles()
+{
+localFileCheckBox.clear();
+localFileVBox.getChildren().clear();
+for(int i =0 ; i < localFileList.length; i++)
+    {
+    CheckBox newCheckBox = new CheckBox();
+    newCheckBox.setText(localFileList[i].toString());
+    localFileCheckBox.add(newCheckBox);            
+    localFileVBox.getChildren().add(newCheckBox);
+    }
+}
+public void repopulateCloudFiles()
+{
+cloudFileCheckBox.clear();
+cloudFileVBox.getChildren().clear();
+for(int i =0 ; i < cloudFileList.length; i++)
+    {
+    CheckBox newCheckBox = new CheckBox();
+    newCheckBox.setText(cloudFileList[i].toString());
+    cloudFileCheckBox.add(newCheckBox);
+    cloudFileVBox.getChildren().add(newCheckBox);
+    }
+}
     /**
      * @param args the command line arguments
      */
